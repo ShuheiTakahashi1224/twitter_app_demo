@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../app/store";
 
 export const userSlice = createSlice({
-  name: "counter",
+  name: "user",
   initialState: {
     user: { uid: "", photoUrl: "", displayName: "" },
   },
