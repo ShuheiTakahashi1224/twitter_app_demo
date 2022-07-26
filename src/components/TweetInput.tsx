@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import { auth, db, storage } from "../firebase";
-import { Avatar } from "@material-ui/core";
+import { Avatar, Button, IconButton } from "@material-ui/core";
 import firebase from "firebase";
 import styles from "./TweetInput.module.css";
+import { AddAPhoto } from "@material-ui/icons";
 
 const TweetInput = () => {
   const user = useSelector(selectUser);
@@ -64,15 +65,52 @@ const TweetInput = () => {
     setTweetMessage("");
   };
   return (
-    <div>
-      <Avatar
-        className={styles.tweet_avatar}
-        src={user.photoUrl}
-        onClick={async () => {
-          await auth.signOut();
-        }}
-      />
-    </div>
+    <>
+      <form onSubmit={sendTweet}>
+        <div className={styles.tweet_form}>
+          <Avatar
+            className={styles.tweet_avatar}
+            src={user.photoUrl}
+            onClick={async () => {
+              await auth.signOut();
+            }}
+          />
+          <input
+            className={styles.tweet_input}
+            placeholder="What's happening?"
+            type="text"
+            autoFocus
+            value={tweetMessage}
+            onChange={(e) => {
+              setTweetMessage(e.target.value);
+            }}
+          />
+          <IconButton>
+            <label>
+              <AddAPhoto
+                className={
+                  tweetImage ? styles.tweet_addIconLoaded : styles.tweet_addIcon
+                }
+              />
+              <input
+                type="file"
+                onChange={onChangeImageHandler}
+                className={styles.tweet_hiddenIcon}
+              />
+            </label>
+          </IconButton>
+        </div>
+        <Button
+          type="submit"
+          disabled={!tweetMessage}
+          className={
+            tweetMessage ? styles.tweet_sendBtn : styles.tweet_sendDisableBtn
+          }
+        >
+          Tweet
+        </Button>
+      </form>
+    </>
   );
 };
 
